@@ -4,19 +4,33 @@
 
 #include "headers/expr.h"
 #include "headers/globals.h"
+#include "headers/data.h"
 
 // -----------------> Main 
 
 
 int main(void) {
-    globals_t * globals = init_globals();
-    expr_t * expr1 = init_expr("test");
-    expr_t * expr2 = init_expr("succes");
+    stack_t * stack = init_stack();
+    queue_t * queue = init_queue();
 
-    set_expr(globals, 'a', expr1);
-    set_expr(globals, 'a', expr2);
+    push_stack(stack, 'a');
+    push_stack(stack, 'b');
+    push_stack(stack, 'c');
 
-    printf("%s\n", find_expr(globals, 'a') -> txt);
+    printf("%c", pop_stack(stack));
+    printf("%c", pop_stack(stack));
+    printf("%c", pop_stack(stack));
+
+    push_queue(queue, 'a');
+    push_queue(queue, 'b');
+    push_queue(queue, 'c');
+
+    printf("\n%c", pop_queue(queue));
+    printf("%c", pop_queue(queue));
+    printf("%c", pop_queue(queue));
+
+    free_stack(stack);
+    free_queue(queue);
 
     return 0;
 }
