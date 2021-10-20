@@ -76,7 +76,7 @@ expr_t * init_expr(char * txt) {
     }
 
     // Fill expr
-    expr -> key = 0;
+    expr -> key = '?';
     expr -> txt = concatenate_queue(parsed_expr);
     expr -> vars = concatenate_queue(variables);
 
@@ -86,4 +86,16 @@ expr_t * init_expr(char * txt) {
 
     // Return expr
     return expr;
+}
+
+// Displays an expression
+void display_expr(expr_t * expr) {
+    printf("Displaying expression '%c':\n\tText: %s\n\tVars: %s\n", expr -> key, expr -> txt, expr -> vars);
+}
+
+// Frees an expression
+void free_expr(expr_t * expr) {
+    free(expr -> txt);
+    free(expr -> vars);
+    free(expr);
 }

@@ -12,5 +12,7 @@ typedef struct Expression {
 // -----------------> Functions
 
 expr_t * init_expr(char * txt);
+void display_expr(expr_t * expr);
+void free_expr(expr_t * expr);
 
 #endif

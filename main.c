@@ -1,6 +1,6 @@
 // -----------------> Dependencies
 
-#include <stdio.h>
+#include <stdlib.h>
 
 #include "headers/expr.h"
 #include "headers/globals.h"
@@ -11,8 +11,8 @@
 
 int main(void) {
     expr_t * expr = init_expr("(a + b)!c");
-    printf("%s\n", expr -> txt);
-    printf("%s\n", expr -> vars);
+    display_expr(expr);
+    free_expr(expr);
 
     return 0;
 }
