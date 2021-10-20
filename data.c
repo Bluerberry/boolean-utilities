@@ -56,6 +56,26 @@ char pop_stack(stack_t * stack) {
     return content;
 }
 
+// Finds a node from in the stack
+int in_stack(stack_t * stack, char content) {
+    for (node_t * node = stack -> head; node; node = node -> next)
+        if (node -> content == content)
+            return 1;
+    return 0;
+}
+
+// Concatenate stack into string
+char * concatenate_stack(stack_t * stack) {
+    int i = 0;
+
+    // Create and copy string
+    char * txt = malloc(stack -> length * sizeof(char));
+    for (node_t * node = stack -> head; node; node = node -> next)
+        txt[i++] = node -> content;
+
+    return txt;
+}
+
 // Creates a new queue instance
 queue_t * init_queue() {
     queue_t * queue = malloc(sizeof(queue_t));
@@ -107,4 +127,24 @@ char pop_queue(queue_t * queue) {
     free(node);
     
     return content;
+}
+
+// Finds a node from in the queue
+int in_queue(queue_t * queue, char content) {
+    for (node_t * node = queue -> head; node; node = node -> next)
+        if (node -> content == content)
+            return 1;
+    return 0;
+}
+
+// Concatenate queue into string
+char * concatenate_queue(queue_t * queue) {
+    int i = 0;
+
+    // Create and copy string
+    char * txt = malloc(queue -> length * sizeof(char));
+    for (node_t * node = queue -> head; node; node = node -> next)
+        txt[i++] = node -> content;
+
+    return txt;
 }
