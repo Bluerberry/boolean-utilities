@@ -10,6 +10,11 @@
 // Creates a new stack instance
 stack_t * init_stack() {
     stack_t * stack = malloc(sizeof(stack_t));
+    if (stack == NULL) {
+        printf("Error: Insufficient memory to allocate 'stack'\n");
+        exit(-1);
+    }
+    
     stack -> length = 0;
     stack -> head = NULL;
 
@@ -28,6 +33,11 @@ void push_stack(stack_t * stack, char content) {
 
     // Create new node
     node_t * node = malloc(sizeof(node_t));
+    if (node == NULL) {
+        printf("Error: Insufficient memory to allocate 'node'\n");
+        exit(-1);
+    }
+
     node -> content = content;
     node -> next = stack -> head;
 
@@ -70,6 +80,11 @@ char * concatenate_stack(stack_t * stack) {
 
     // Create and copy string
     char * txt = malloc(stack -> length * sizeof(char));
+    if (txt == NULL) {
+        printf("Error: Insufficient memory to allocate 'txt'\n");
+        exit(-1);
+    }
+
     for (node_t * node = stack -> head; node; node = node -> next)
         txt[i++] = node -> content;
 
@@ -79,6 +94,11 @@ char * concatenate_stack(stack_t * stack) {
 // Creates a new queue instance
 queue_t * init_queue() {
     queue_t * queue = malloc(sizeof(queue_t));
+    if (queue == NULL) {
+        printf("Error: Insufficient memory to allocate 'queue'\n");
+        exit(-1);
+    }
+
     queue -> length = 0;
     queue -> head = NULL;
     queue -> tail = NULL;
@@ -98,6 +118,11 @@ void push_queue(queue_t * queue, char content) {
 
     // Create new node
     node_t * node = malloc(sizeof(node_t));
+    if (node == NULL) {
+        printf("Error: Insufficient memory to allocate 'node'\n");
+        exit(-1);
+    }
+
     node -> content = content;
     node -> next = NULL;
 
@@ -143,6 +168,11 @@ char * concatenate_queue(queue_t * queue) {
 
     // Create and copy string
     char * txt = malloc(queue -> length * sizeof(char));
+    if (txt == NULL) {
+        printf("Error: Insufficient memory to allocate 'txt'\n");
+        exit(-1);
+    }
+
     for (node_t * node = queue -> head; node; node = node -> next)
         txt[i++] = node -> content;
 
