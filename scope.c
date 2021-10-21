@@ -61,6 +61,5 @@ void set_expr(scope_t * scope, char key, expr_t * expr) {
 
     // Replace old expression
     size_t hash = hash_key(key);
-    free(scope -> exprs[hash]);
     scope -> exprs[hash] = expr;
 }

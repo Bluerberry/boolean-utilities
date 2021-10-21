@@ -21,10 +21,8 @@ expr_t * init_expr(char * txt) {
 
     // Variables
     queue_t * parsed_expr = init_queue();
-    queue_t * variables = init_queue();
     int bracket = 0; // Keeps track if all brackets have been closed
     int operand = 0; // True if previous char can accept an operand
-    int nested = 0;  // True if expecting a nested expression
 
     // Parse expression
     for (int i = 0; i < strlen(txt); i++) {
@@ -34,34 +32,33 @@ expr_t * init_expr(char * txt) {
         if (c == ' ')
             continue;
 
-        // Insert missing operands
-        if (operand && (c == '(' || c == '!' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')))
-            push_queue(parsed_expr, '*');
-
         // Parse character
-        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
-            if (!nested && !in_queue(variables, c))
-                push_queue(variables, c);
+        if (c == '0' || c == '1' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+            if (operand) push_queue(parsed_expr, '*');
             operand = 1;
-            nested = 0;
-        } else if (!nested) {
-            if (c == '(') {
-                operand = 0;
-                bracket++;
-            } else if (c == ')') {
-                operand = 1;
-                bracket--;
-            } else if (c == '%') {
-                operand = 0;
-                nested = 1;
-            } else if (c == '!' || c == '*' || c == '+' || c == '^') {
-                operand = 0;
-            } else {
-                printf("Error: Unkown character found '%c'\n", c);
+        } else if (c == '(') {
+            if (operand) push_queue(parsed_expr, '*');
+            operand = 0;
+            bracket++;
+        } else if (c == ')') {
+            operand = 1;
+            bracket--;
+        } else if (c == '!') {
+            if (operand) push_queue(parsed_expr, '*');
+            operand = 0;
+        } else if (c == '*' || c == '+' || c == '^') {
+            if (!operand) {
+                printf("Error: Unexpected operand found '%c'\n", c);
                 exit(-1);
-            }
+            } operand = 0;
         } else {
-            printf("Error: Expected a nested expression\n");
+            printf("Error: Unkown character found '%c'\n", c);
+            exit(-1);
+        }
+
+        // Check for mismatched brackets
+        if (bracket < 0) {
+            printf("Error: Mismatched brackets found\n");
             exit(-1);
         }
 
@@ -70,7 +67,7 @@ expr_t * init_expr(char * txt) {
     }
 
     // Check for mismatched brackets
-    if (bracket) {
+    if (bracket != 0) {
         printf("Error: Mismatched brackets found\n");
         exit(-1);
     }
@@ -78,11 +75,9 @@ expr_t * init_expr(char * txt) {
     // Fill expr
     expr -> key = '?';
     expr -> txt = concatenate_queue(parsed_expr);
-    expr -> vars = concatenate_queue(variables);
 
-    // Free variables
+    // Free queue
     free_queue(parsed_expr);
-    free_queue(variables);
 
     // Return expr
     return expr;
@@ -90,12 +85,11 @@ expr_t * init_expr(char * txt) {
 
 // Displays an expression
 void display_expr(expr_t * expr) {
-    printf("Displaying expression '%c':\n\tText: %s\n\tVars: %s\n", expr -> key, expr -> txt, expr -> vars);
+    printf("Displaying expression '%c':\n\tText: %s\n", expr -> key, expr -> txt);
 }
 
 // Frees an expression
 void free_expr(expr_t * expr) {
     free(expr -> txt);
-    free(expr -> vars);
     free(expr);
 }

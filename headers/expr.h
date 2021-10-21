@@ -6,7 +6,6 @@
 typedef struct Expression {
     char key;
     char * txt;
-    char * vars;
 } expr_t;
 
 // -----------------> Functions
