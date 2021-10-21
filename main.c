@@ -11,7 +11,7 @@
 
 int main(void) {
     scope_t global = init_scope();
-    set_expr(global, 'f', init_expr("abc"));
+    set_expr(global, 'f', init_expr("a(b ! c)"));
     set_expr(global, 'b', init_expr("ac"));
     set_expr(global, 'c', init_expr("0"));
     
