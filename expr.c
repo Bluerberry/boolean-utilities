@@ -9,15 +9,8 @@
 
 // -----------------> Functions
 
-// Creates a new globals list
-expr_t * init_expr(char * txt) {
-
-    // Allocate globals
-    expr_t * expr = malloc(sizeof(expr_t));
-    if (expr == NULL) {
-        printf("Error: Insufficient memory to allocate 'expr'\n");
-        exit(-1);
-    }
+// Creates a new expression
+expr_t init_expr(char * txt) {
 
     // Variables
     queue_t * parsed_expr = init_queue();
@@ -72,24 +65,12 @@ expr_t * init_expr(char * txt) {
         exit(-1);
     }
 
-    // Fill expr
-    expr -> key = '?';
-    expr -> txt = concatenate_queue(parsed_expr);
+    // Create expr
+    expr_t expr = concatenate_queue(parsed_expr);
 
     // Free queue
     free_queue(parsed_expr);
 
     // Return expr
     return expr;
-}
-
-// Displays an expression
-void display_expr(expr_t * expr) {
-    printf("Displaying expression '%c':\n\tText: %s\n", expr -> key, expr -> txt);
-}
-
-// Frees an expression
-void free_expr(expr_t * expr) {
-    free(expr -> txt);
-    free(expr);
 }

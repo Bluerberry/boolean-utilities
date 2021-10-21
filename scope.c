@@ -21,45 +21,43 @@ static size_t hash_key(char key) {
 }
 
 // Creates a new scope
-scope_t * init_scope() {
+scope_t init_scope() {
 
     // Allocate scope
-    scope_t * scope = malloc(sizeof(scope_t));
+    scope_t scope = calloc(52, sizeof(expr_t));
     if (scope == NULL) {
         printf("Error: Insufficient memory to allocate 'scope'\n");
         exit(-1);
     }
 
     // Fill scope
-    for (int i = 0; i < 52; i++) {
-        scope -> exprs[i] = NULL;
-    }
+    for (int i = 0; i < 52; i++)
+        scope[i] = NULL;
 
     // Return scope
     return scope;
 }
 
 // Finds an expression in scope
-expr_t * find_expr(scope_t * scope, char key) {
-    expr_t * expr = scope -> exprs[hash_key(key)];
-    
-    // Check if expression exists
-    if (expr == NULL) {
-        printf("Error: Could not find expression '%%%c'\n", key);
-        exit(-1);
-    }
-
-    // Return expression
-    return expr;
+expr_t find_expr(scope_t scope, char key) {
+    return scope[hash_key(key)];
 }
 
 // Assigns an expression to a key in scope
-void set_expr(scope_t * scope, char key, expr_t * expr) {
+void set_expr(scope_t scope, char key, expr_t expr) {
 
-    // Update new expression
-    expr -> key = key;
-
-    // Replace old expression
+    // Free old expression
     size_t hash = hash_key(key);
-    scope -> exprs[hash] = expr;
+    if (scope[hash] != NULL)
+        free(scope[hash]);
+    
+    // Set new expr
+    scope[hash] = expr;
+}
+
+// Frees scope
+void free_scope(scope_t scope) {
+    for (int i = 0; i < 52; i++)
+        free(scope[i]);
+    free(scope);
 }

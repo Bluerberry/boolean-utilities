@@ -1,17 +1,12 @@
 #ifndef EXPR_H
 #define EXPR_H
 
-// -----------------> Structs
+// -----------------> Types
 
-typedef struct Expression {
-    char key;
-    char * txt;
-} expr_t;
+typedef char * expr_t;
 
 // -----------------> Functions
 
-expr_t * init_expr(char * txt);
-void display_expr(expr_t * expr);
-void free_expr(expr_t * expr);
+expr_t init_expr(char * txt);
 
 #endif

@@ -1,16 +1,15 @@
 #ifndef SCOPE_H
 #define SCOPE_H
 
-// -----------------> Structs
+// -----------------> Types
 
-typedef struct Scope {
-    expr_t * exprs[52];
-} scope_t;
+typedef expr_t * scope_t;
 
 // -----------------> Functions
 
-scope_t * init_scope();
-expr_t * find_expr(scope_t * scope, char key);
-void set_expr(scope_t * scope, char key, expr_t * expression);
+scope_t init_scope();
+expr_t find_expr(scope_t scope, char key);
+void set_expr(scope_t scope, char key, expr_t expr);
+void free_scope(scope_t scope);
 
 #endif
