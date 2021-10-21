@@ -23,6 +23,7 @@ typedef struct Queue {
 
 // Stack manipulation
 stack_t * init_stack();
+stack_t * copy_stack(stack_t * stack);
 void free_stack(stack_t * stack);
 void push_stack(stack_t * stack, char content);
 char pop_stack(stack_t * stack);
@@ -31,10 +32,12 @@ char * concatenate_stack(stack_t * stack);
 
 // Queue manipulation
 queue_t * init_queue();
+queue_t * copy_queue(queue_t * queue);
 void free_queue(queue_t * queue);
 void push_queue(queue_t * queue, char content);
 char pop_queue(queue_t * queue);
 int in_queue(queue_t * queue, char content);
 char * concatenate_queue(queue_t * queue);
+
 
 #endif

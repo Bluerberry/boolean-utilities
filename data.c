@@ -21,6 +21,14 @@ stack_t * init_stack() {
     return stack;
 }
 
+// Copy stack onto new stack instance
+stack_t * copy_stack(stack_t * stack) {
+    stack_t * new_stack = init_stack();
+    for (node_t * node = stack -> head; node; node = node -> next)
+        push_stack(new_stack, node -> content);
+    return new_stack;
+}
+
 // Frees stack and all its children
 void free_stack(stack_t * stack) {
     while (stack -> length)
@@ -85,6 +93,8 @@ char * concatenate_stack(stack_t * stack) {
         exit(-1);
     }
 
+    txt[stack -> length] = 0;
+
     for (node_t * node = stack -> head; node; node = node -> next)
         txt[i++] = node -> content;
 
@@ -104,6 +114,14 @@ queue_t * init_queue() {
     queue -> tail = NULL;
 
     return queue;
+}
+
+// Copy queue onto new queue instance
+queue_t * copy_queue(queue_t * queue) {
+    queue_t * new_queue = init_queue();
+    for (node_t * node = queue -> head; node; node = node -> next)
+        push_queue(new_queue, node -> content);
+    return new_queue;
 }
 
 // Frees queue and all its children
@@ -173,8 +191,10 @@ char * concatenate_queue(queue_t * queue) {
         exit(-1);
     }
 
+    txt[queue -> length] = 0;
+
     for (node_t * node = queue -> head; node; node = node -> next)
-        txt[i++] = node -> content;
+        txt[i++] = node -> content; 
 
     return txt;
 }

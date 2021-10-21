@@ -6,6 +6,7 @@
 
 #include "headers/data.h"
 #include "headers/expr.h"
+#include "headers/scope.h"
 
 // -----------------> Functions
 
