@@ -12,7 +12,7 @@
 // -----------------> Functions
 
 // Recursively fills an expression
-expr_t expand_expr(scope_t scope, expr_t expr, queue_t * trace) {
+static expr_t expand_expr(scope_t scope, expr_t expr, queue_t * trace) {
 
     // Fill nested expressions
     queue_t * expanding_expr = init_queue();
@@ -60,4 +60,56 @@ expr_t expand_expr(scope_t scope, expr_t expr, queue_t * trace) {
 
     // Return expanded expression
     return expanded_expr;
+}
+
+// Solve an expression
+void solve_expr(scope_t scope, expr_t expr) {
+    
+    // Expand expression
+    queue_t * trace = init_queue();
+    expr_t expanded_expr = expand_expr(scope, expr, trace);
+
+    // Convert to postfix
+    queue_t * queue = init_queue();
+    stack_t * stack = init_stack();
+
+    // Shunting-Yard algorithm
+    for (int i = 0; i < strlen(expanded_expr); i++) {
+        char c = expanded_expr[i];
+
+        if (c == '0' || c == '1' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+            push_queue(queue, c);
+        } else if (c == '(' || c == '!') {
+            push_stack(stack, c);
+        } else if (c == ')') {
+            while (stack -> head -> content != '(')
+                push_queue(queue, pop_stack(stack));
+            pop_stack(stack);
+            if (stack -> head && stack -> head -> content == '!')
+                push_queue(queue, pop_stack(stack));            
+        } else {
+            while (
+                stack -> length > 0 &&
+                stack -> head -> content != '(' &&
+                (stack -> head -> content != '+' || c == '+')
+            ) {
+                push_queue(queue, pop_stack(stack));
+            }
+
+            push_stack(stack, c);
+        }
+    }
+
+    // Create postfix expression
+    while (stack -> length > 0)
+        push_queue(queue, pop_stack(stack));
+    expr_t postfix_expr = concatenate_queue(queue);
+
+    printf("%s\n", postfix_expr);
+
+    // Free variables
+    free(expanded_expr);
+    free(postfix_expr);
+    free_queue(queue);
+    free_stack(stack);
 }

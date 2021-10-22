@@ -3,6 +3,6 @@
 
 // -----------------> Functions
 
-expr_t expand_expr(scope_t scope, expr_t expr, queue_t * trace);
+void solve_expr(scope_t scope, expr_t expr);
 
 #endif
