@@ -11,7 +11,7 @@
 
 int main(void) {
     scope_t global = init_scope();
-    set_expr(global, 'f', init_expr("(b ! c)a"));
+    set_expr(global, 'f', init_expr("a + !bc"));
 
     solve_expr(global, find_expr(global, 'f'));
     

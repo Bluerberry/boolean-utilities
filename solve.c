@@ -79,6 +79,8 @@ void solve_expr(scope_t scope, expr_t expr) {
 
         if (c == '0' || c == '1' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
             push_queue(queue, c);
+        } else if (c == '\'') {
+            push_queue(queue, '!');
         } else if (c == '(' || c == '!') {
             push_stack(stack, c);
         } else if (c == ')') {

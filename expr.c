@@ -38,7 +38,9 @@ expr_t init_expr(char * txt) {
                 if (accept_operator) push_queue(parsed_expr, '*');
                 accept_operator = 0;
         } else if (accept_operator) {
-            if (c == ')') {
+            if (c == '\'') {
+                accept_operator = 1;
+            } else if (c == ')') {
                 accept_operator = 1;
                 bracket--;
             } else if (c == '*' || c == '+' || c == '^') {
