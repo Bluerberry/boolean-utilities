@@ -75,11 +75,8 @@ int main(int argc, char * argv[]) {
             for (int i = 0; i <= truth -> var_count; i++)
                 printf("─");
             printf("┐\n");
-            for (int i = 0; i <= truth -> perm_count; i++)
+            for (int i = 0; i < truth -> perm_count; i++)
                 printf("%s │ %c\n", truth -> input[i], truth -> output[i]);
-            
-            // Free truthtable
-            free_truthtable(truth);
 
         // Handle unknown commands
         } else {
