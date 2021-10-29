@@ -13,6 +13,7 @@
 // Initializes an empty truthtable
 truthtable_t * init_truthtable(int var_count) {
     truthtable_t * truthtable = malloc(sizeof(truthtable));
+    truthtable -> var_count   = var_count;
     truthtable -> perm_count  = pow(2, var_count);
     truthtable -> vars        = malloc(var_count * sizeof(char));
     truthtable -> output      = malloc(truthtable -> perm_count * sizeof(char));

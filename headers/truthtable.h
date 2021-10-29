@@ -4,6 +4,7 @@
 // -----------------> Types
 
 typedef struct Truthtable {
+    int var_count;
     int perm_count;
     char ** input;
     char * output;

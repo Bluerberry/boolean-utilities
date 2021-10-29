@@ -45,7 +45,7 @@ expr_t find_expr(scope_t scope, char key) {
 }
 
 // Assigns an expression to a key in scope
-void set_expr(scope_t scope, char key, expr_t expr) {
+void set_expr(scope_t scope, char key, char * expr) {
 
     // Free old expression
     size_t hash = hash_key(key);
@@ -53,7 +53,7 @@ void set_expr(scope_t scope, char key, expr_t expr) {
         free(scope[hash]);
     
     // Set new expr
-    scope[hash] = expr;
+    scope[hash] = init_expr(expr);
 }
 
 // Frees scope
