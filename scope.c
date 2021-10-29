@@ -16,7 +16,7 @@ static size_t hash_key(char key) {
     } else if (key >= 'A' && key <= 'Z') {
         return key - 'A' + 'z';
     } else {
-        printf("Error: Could not find expression '%%%c'\n", key);
+        printf("Error: Invalid key '%c'\n", key);
         exit(-1);
     }
 }
