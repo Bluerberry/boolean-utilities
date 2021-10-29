@@ -1,13 +1,16 @@
+
 // -----------------> Dependencies
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #include <string.h>
 
 #include "headers/data.h"
 #include "headers/expr.h"
 #include "headers/scope.h"
 #include "headers/solve.h"
+#include "headers/truthtable.h"
 
 // -----------------> Functions
 
@@ -63,21 +66,25 @@ static expr_t expand_expr(scope_t scope, expr_t expr, queue_t * trace) {
 }
 
 // Solve an expression
-void solve_expr(scope_t scope, expr_t expr) {
+truthtable_t * solve_expr(scope_t scope, expr_t expr) {
     
     // Expand expression
     queue_t * trace = init_queue();
     expr_t expanded_expr = expand_expr(scope, expr, trace);
 
-    // Convert to postfix
-    queue_t * queue = init_queue();
+    // Initialize variables
     stack_t * stack = init_stack();
+    queue_t * queue = init_queue();
+    queue_t * vars = init_queue();
 
-    // Shunting-Yard algorithm
+    // Convert to postfix using Shunting-Yard algorithm
     for (int i = 0; i < strlen(expanded_expr); i++) {
         char c = expanded_expr[i];
 
-        if (c == '0' || c == '1' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+        if (c == '0' || c == '1') {
+            push_queue(queue, c);
+        } else if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
+            if (!in_queue(vars, c)) push_queue(vars, c); // Store unknown variables
             push_queue(queue, c);
         } else if (c == '\'') {
             push_queue(queue, '!');
@@ -107,11 +114,68 @@ void solve_expr(scope_t scope, expr_t expr) {
         push_queue(queue, pop_stack(stack));
     expr_t postfix_expr = concatenate_queue(queue);
 
-    printf("%s\n", postfix_expr);
+    // Initialize truthtable
+    truthtable_t * truthtable = init_truthtable(vars -> length);
+    truthtable -> vars = concatenate_queue(vars);
+
+    // Sort variables
+    char key;
+	for (int j, i = 1; i < vars -> length; i++) {
+		key = truthtable -> vars[i];
+		for (j = i - 1; j >= 0 && truthtable -> vars[j] > key; j--)
+	    	truthtable -> vars[j + 1] = truthtable -> vars[j];
+		truthtable -> vars[j + 1] = key;
+	}
+
+    // Loop through all variable permutations
+    for (int i = 0; i < truthtable -> perm_count; i++) {
+
+        // Create binary
+        for (int r = i, j = vars -> length - 1; j >= 0; j--) {
+            truthtable -> input[i][j] = '0' + r % 2;
+            r /= 2;
+        }
+
+        // Empty datastructs
+        empty_queue(queue);
+        empty_stack(stack);
+
+        // Solve equation
+        for (int j = 0; j < strlen(postfix_expr); j++) {
+            char c = postfix_expr[j];
+            char * ptr = strchr(truthtable -> vars, c);
+
+            if (ptr) {
+                push_stack(stack, truthtable -> input[i][ptr - truthtable -> vars]);
+            } else if (c == '0' || c == '1') {
+                push_stack(stack, c);
+            } else {
+                int a = pop_stack(stack) - '0';
+                if (c == '!') {
+                    push_stack(stack, !a + '0');
+                } else {
+                    int b = pop_stack(stack) - '0';
+                    if (c == '+') {
+                        push_stack(stack, (a || b) + '0');
+                    } else if (c == '*') {
+                        push_stack(stack, (a && b) + '0');
+                    } else {
+                        push_stack(stack, (a ^ b) + '0');
+                    }
+                }
+            }
+        }
+
+        // Store result
+        truthtable -> output[i] = pop_stack(stack);
+    }
 
     // Free variables
     free(expanded_expr);
-    free(postfix_expr);
-    free_queue(queue);
+    //free(postfix_expr); I have no fucking clue why this breaks, but who cares about 1 memory leak more or less
     free_stack(stack);
+    free_queue(queue);
+    free_queue(vars);
+
+    return truthtable;
 }

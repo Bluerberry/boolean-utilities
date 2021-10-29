@@ -1,3 +1,4 @@
+
 // -----------------> Dependencies
 
 #include <stdlib.h>
@@ -6,6 +7,8 @@
 #include "headers/data.h"
 
 // -----------------> Functions
+
+// Stack manipulation
 
 // Creates a new stack instance
 stack_t * init_stack() {
@@ -29,10 +32,15 @@ stack_t * copy_stack(stack_t * stack) {
     return new_stack;
 }
 
-// Frees stack and all its children
-void free_stack(stack_t * stack) {
+// Empties the stack
+void empty_stack(stack_t * stack) {
     while (stack -> length)
         pop_stack(stack);
+}
+
+// Frees stack and all its children
+void free_stack(stack_t * stack) {
+    empty_stack(stack);
     free(stack);
 }
 
@@ -74,32 +82,7 @@ char pop_stack(stack_t * stack) {
     return content;
 }
 
-// Finds a node from in the stack
-int in_stack(stack_t * stack, char content) {
-    for (node_t * node = stack -> head; node; node = node -> next)
-        if (node -> content == content)
-            return 1;
-    return 0;
-}
-
-// Concatenate stack into string
-char * concatenate_stack(stack_t * stack) {
-    int i = 0;
-
-    // Create and copy string
-    char * txt = malloc(stack -> length * sizeof(char));
-    if (txt == NULL) {
-        printf("Error: Insufficient memory to allocate 'txt'\n");
-        exit(-1);
-    }
-
-    txt[stack -> length] = 0;
-
-    for (node_t * node = stack -> head; node; node = node -> next)
-        txt[i++] = node -> content;
-
-    return txt;
-}
+// Queue manipulation
 
 // Creates a new queue instance
 queue_t * init_queue() {
@@ -124,10 +107,15 @@ queue_t * copy_queue(queue_t * queue) {
     return new_queue;
 }
 
-// Frees queue and all its children
-void free_queue(queue_t * queue) {
+// Empties the queue
+void empty_queue(queue_t * queue) {
     while (queue -> length)
         pop_queue(queue);
+}
+
+// Frees queue and all its children
+void free_queue(queue_t * queue) {
+    empty_queue(queue);
     free(queue);
 }
 
